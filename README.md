@@ -55,11 +55,11 @@
 
 [youtube]: https://www.youtube.com/channel/UC61J3SajYQm_OXXx2jp6l4g
 [instagram]: https://instagram.com/furknesn
-[website]: https://codeSTACKr.com
-[course]: http://vsCodeHero.com
-[twitter]: https://twitter.com/codeSTACKr
-[linkedin]: https://linkedin.com/in/codeSTACKr
-[webdevplaylist]: https://www.youtube.com/playlist?list=PLkwxH9e_vrAJ0WbEsFA9W3I1W-g_BTsbt
-[jsplaylist]: https://www.youtube.com/playlist?list=PLkwxH9e_vrALRJKu7wfXby3MKeflhTu6B
-[cssplaylist]: https://www.youtube.com/playlist?list=PLkwxH9e_vrALSdvZuEh6gqQdmDoDIoqz4
-[reactplaylist]: https://www.youtube.com/playlist?list=PLkwxH9e_vrAK4TdffpxKY3QGyHCpxFcQ0
+[website]: https://www.youtube.com/channel/UC61J3SajYQm_OXXx2jp6l4g
+[course]: https://www.youtube.com/channel/UC61J3SajYQm_OXXx2jp6l4g
+[twitter]: https://www.youtube.com/channel/UC61J3SajYQm_OXXx2jp6l4g
+[linkedin]: https://www.youtube.com/channel/UC61J3SajYQm_OXXx2jp6l4g
+[webdevplaylist]: https://www.youtube.com/channel/UC61J3SajYQm_OXXx2jp6l4g
+[jsplaylist]: https://www.youtube.com/channel/UC61J3SajYQm_OXXx2jp6l4g
+[cssplaylist]: https://www.youtube.com/channel/UC61J3SajYQm_OXXx2jp6l4g
+[reactplaylist]: https://www.youtube.com/channel/UC61J3SajYQm_OXXx2jp6l4g

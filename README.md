@@ -3,7 +3,7 @@
 
 ## I'm a freelance developer!
 
-- 🌱 I’m currently learning C++ & Go
+- 🌱 I’m currently learning Go
 - 👯 I’m looking to collaborate with other content creators
 - 🥅 2022 Goals: Learn more about python
 - ⚡ Fun fact: I love to read book and hang around

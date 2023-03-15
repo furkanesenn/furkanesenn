@@ -9,7 +9,7 @@
 
 - 👯 I’m looking to collaborate on **open source projects**
 
-- 👨‍💻 All of my projects are available at [on my Github account (some are private)](on my Github account (some are private))
+- 👨‍💻 All of my projects are available at [on my Github account (some are private)]
 
 - 💬 Ask me about **anything about web dev**
 

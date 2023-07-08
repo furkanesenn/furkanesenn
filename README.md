@@ -5,13 +5,13 @@
 
 - 🔭 I’m currently working on [Justhink](https://github.com/Justhink-Community)
 
-- 🌱 I’m currently learning **Next.js, Sales Psychology**
+- 🌱 I’m currently learning **Marketing**
 
 - 👯 I’m looking to collaborate on **open source projects**
 
 - 👨‍💻 All of my projects are available at [on my Github account (some are private)]
 
-- 💬 Ask me about **anything about web dev**
+- 💬 Ask me **anything about web dev**
 
 - 📫 How to reach me **furkanesen1900@gmail.com, or furkan.esen@justhink.net**
 

@@ -10,12 +10,14 @@ import datetime as dt
 import concurrent.futures
 import json
 import os
+import re
 import shutil
 import subprocess
 import tempfile
 import urllib.error
 import urllib.parse
 import urllib.request
+import zipfile
 from collections import Counter
 from pathlib import Path
 
@@ -83,28 +85,59 @@ def authored_commits_and_repos(token: str) -> tuple[int, dict[str, dict]]:
             "q": f"author:{LOGIN}", "per_page": 100, "page": page,
         }), token)["items"]
     repos = {item["repository"]["full_name"]: item["repository"] for item in items}
-    # Also cover owned projects whose commits are not indexed by search.
-    page = 1
-    while True:
-        owned = api("user/repos?" + urllib.parse.urlencode({
-            "affiliation": "owner", "per_page": 100, "page": page,
-        }), token)
-        for repo in owned:
-            if repo["owner"]["login"].lower() == LOGIN:
-                repos[repo["full_name"]] = repo
-        if len(owned) < 100:
-            break
-        page += 1
     return len({item["sha"] for item in items}), repos
 
 
-def count_repo(repo: str, cloc: str) -> dict:
+def accessible_repos(token: str) -> dict[str, dict]:
+    """All repositories visible to the account, including org and collaborator repos."""
+    repos = {}
+    page = 1
+    while True:
+        visible = api("user/repos?" + urllib.parse.urlencode({
+            "affiliation": "owner,collaborator,organization_member",
+            "per_page": 100, "page": page,
+        }), token)
+        for repo in visible:
+            repos[repo["full_name"]] = repo
+        if len(visible) < 100:
+            break
+        page += 1
+    return repos
+
+
+def download_archive(repo: str, token: str, temp: Path) -> Path:
+    """Handle Windows-incompatible Git paths through a sanitized archive."""
+    archive = temp / "source.zip"
+    req = urllib.request.Request(
+        f"https://api.github.com/repos/{repo}/zipball",
+        headers={"Authorization": f"Bearer {token}", "User-Agent": "furkanesenn-profile-stats"},
+    )
+    with urllib.request.urlopen(req, timeout=120) as response, archive.open("wb") as out:
+        shutil.copyfileobj(response, out)
+    destination = temp / "archive-source"
+    destination.mkdir()
+    with zipfile.ZipFile(archive) as zipped:
+        for member in zipped.infolist():
+            parts = member.filename.split("/")[1:]  # GitHub's root folder
+            if member.is_dir() or not parts or any(part in {"", ".", ".."} for part in parts):
+                continue
+            safe = [re.sub(r'[<>:"\\|?*]', "_", part).rstrip(". ") for part in parts]
+            target = destination.joinpath(*safe)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            with zipped.open(member) as source, target.open("wb") as output:
+                shutil.copyfileobj(source, output)
+    return destination
+
+
+def count_repo(repo: str, cloc: str, token: str) -> dict:
     with tempfile.TemporaryDirectory(prefix="furkan-github-loc-") as temp:
         destination = Path(temp) / "project"
-        subprocess.run(
+        clone = subprocess.run(
             ["gh", "repo", "clone", repo, str(destination), "--", "--depth", "1", "--single-branch"],
-            check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True,
+            check=False, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True,
         )
+        if clone.returncode != 0:
+            destination = download_archive(repo, token, Path(temp))
         result = subprocess.run([
             cloc, str(destination), "--json", "--quiet",
             f"--exclude-dir={EXCLUDED_DIRS}", f"--exclude-ext={EXCLUDED_EXTS}",
@@ -118,29 +151,49 @@ def main() -> None:
         raise RuntimeError("Install official cloc and set CLOC_BIN to its executable path")
     token = subprocess.check_output(["gh", "auth", "token"], text=True).strip()
     contributions, restricted = contribution_totals(token)
-    authored_commits, repos = authored_commits_and_repos(token)
+    authored_commits, authored_repos = authored_commits_and_repos(token)
+    repos = accessible_repos(token)
     selected = [repo for repo in repos.values() if not repo.get("fork") and not repo.get("disabled")]
+    cache_path = ROOT / ".cache" / "repo-loc.json"
+    cache_path.parent.mkdir(exist_ok=True)
+    cache = json.loads(cache_path.read_text(encoding="utf-8")) if cache_path.exists() else {}
     languages = Counter()
     code_repositories = 0
     private_repositories = 0
+    def add_result(repo: dict, result: dict) -> None:
+        nonlocal code_repositories, private_repositories
+        total = result.get("SUM", {}).get("code", 0)
+        if total:
+            code_repositories += 1
+            private_repositories += bool(repo["private"])
+        for language, item in result.items():
+            if language not in {"header", "SUM"} and isinstance(item, dict):
+                languages[language] += item.get("code", 0)
+
+    pending = []
+    for repo in selected:
+        saved = cache.get(repo["full_name"])
+        if saved and saved["pushed_at"] == repo["pushed_at"] and saved["size"] == repo["size"]:
+            add_result(repo, saved["result"])
+        else:
+            pending.append(repo)
+    print(f"Reusing {len(selected) - len(pending)} cached repositories; counting {len(pending)}", flush=True)
     with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:
-        futures = {pool.submit(count_repo, repo["full_name"], cloc): repo for repo in selected}
+        futures = {pool.submit(count_repo, repo["full_name"], cloc, token): repo for repo in pending}
         for index, future in enumerate(concurrent.futures.as_completed(futures), 1):
             repo = futures[future]
             result = future.result()
-            print(f"Counted repository {index}/{len(selected)}", flush=True)
-            total = result.get("SUM", {}).get("code", 0)
-            if total:
-                code_repositories += 1
-                private_repositories += bool(repo["private"])
-            for language, item in result.items():
-                if language not in {"header", "SUM"} and isinstance(item, dict):
-                    languages[language] += item.get("code", 0)
+            add_result(repo, result)
+            cache[repo["full_name"]] = {"pushed_at": repo["pushed_at"], "size": repo["size"], "result": result}
+            cache_path.write_text(json.dumps(cache), encoding="utf-8")
+            print(f"Counted repository {index}/{len(pending)}", flush=True)
     snapshot = {
         "as_of": dt.datetime.now(dt.timezone.utc).date().isoformat(),
         "contributions_2021_to_date": contributions,
         "restricted_contributions_2021_to_date": restricted,
         "authored_commits_searchable": authored_commits,
+        "repositories_with_searchable_authored_commits": len(set(authored_repos) & {r["full_name"] for r in selected}),
+        "accessible_repositories": len(repos),
         "repositories_scanned": len(selected),
         "code_repositories": code_repositories,
         "private_code_repositories": private_repositories,

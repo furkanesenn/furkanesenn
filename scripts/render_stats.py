@@ -12,10 +12,11 @@ COLORS = ["#58a6ff", "#3fb950", "#d2a8ff", "#f2cc60", "#ff7b72", "#79c0ff", "#a5
 def render() -> None:
     data = json.loads((ROOT / "stats.json").read_text(encoding="utf-8"))
     year = data["as_of"][:4]
+    rounded_contributions = f'~{data["contributions_2021_to_date"] / 1000:.0f}K'
     values = [
-        (f'{data["contributions_2021_to_date"]:,}', "GITHUB CONTRIBUTIONS", f"2021–{year}"),
+        (rounded_contributions, "GITHUB CONTRIBUTIONS", f"2021–{year} · rounded"),
         (f'{data["authored_commits_searchable"]:,}', "AUTHORED COMMITS", "searchable history"),
-        (f'{data["current_project_code_lines"]:,}', "CURRENT PROJECT LOC", f'{data["code_repositories"]} repositories*'),
+        (f'{data["current_project_code_lines"]:,}', "ACCESSIBLE PROJECT LOC", f'{data["code_repositories"]} repositories*'),
     ]
     parts = [
         '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="370" viewBox="0 0 900 370" role="img" aria-label="Furkan Esen GitHub statistics">',
@@ -50,7 +51,7 @@ def render() -> None:
             f'<circle cx="{x+6}" cy="{y-4}" r="6" fill="{COLORS[index]}"/>',
             f'<text x="{x+19}" y="{y}" fill="#c9d1d9" font-family="Segoe UI,Arial,sans-serif" font-size="14">{escape(name)} · {share:.0f}%</text>',
         ]
-    parts.append('<text x="30" y="351" fill="#8b949e" font-family="Segoe UI,Arial,sans-serif" font-size="11">*Current code lines across accessible project repositories; includes team code. Private repository names stay private.</text>')
+    parts.append('<text x="30" y="351" fill="#8b949e" font-family="Segoe UI,Arial,sans-serif" font-size="11">*Current code lines across accessible repositories; includes team code. Private repository names stay private.</text>')
     parts.append('</svg>')
     output = ROOT / "stats" / "profile-stats.svg"
     output.parent.mkdir(exist_ok=True)

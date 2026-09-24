@@ -14,26 +14,28 @@ The GitHub figures cover **2021–2026**: about **1,000 contributions** across t
 
 ## Languages
 
-**Programming:** Python · TypeScript · JavaScript · Go · Dart · Lua · C/C++ · Swift · Kotlin · SQL · PowerShell
+**Programming:** Python · JavaScript · TypeScript · Go · Lua (including MTA:SA Lua) · SQL
 
 **Web and styling:** HTML · CSS · SCSS
 
-**Other source and configuration formats present in the codebase:** Arduino sketches · CMake · Gradle · Prisma Schema · Dockerfile · Snakemake · XML · JSON · INI · DOS Batch · Windows resource files
-
-The language mix in the chart is calculated from **current code in accessible repositories**, including organization work. It is not a breakdown of my 702,095 lifetime lines. Small historical or experimental files are listed above as evidence of use, not as a claim of equal proficiency in every language.
+The language mix in the chart is calculated from **current code in accessible repositories**, including organization work. It is not a breakdown of my 702,095 lifetime lines.
 
 ## Technologies and tools
 
-| Area | Technologies found in accessible project manifests or active work |
+| Area | Technologies and tools |
 | --- | --- |
-| Front end | React, Next.js, Tailwind CSS, Sass, Radix UI, Framer Motion, Three.js, Tiptap |
-| Back end | Django, Django REST Framework, Django Channels, Express, Node.js, Celery, SQLAlchemy |
-| Data | PostgreSQL, MySQL, Redis, Prisma, Drizzle ORM, Supabase, Firebase, Neon |
-| Mobile and desktop | Flutter, PyQt5, Pygame |
-| Build, delivery, and testing | Vite, Parcel, Docker, Vercel, Playwright, Vitest, React Testing Library, ESLint |
-| Auth and integrations | Clerk, NextAuth, Discord.js, Telegraf, Twilio, Resend |
+| Front end | React.js, Vue.js, Next.js, Tailwind CSS, Bootstrap 5+, shadcn/ui, Radix UI, Sass, Framer Motion, Three.js, Tiptap |
+| Back end | Python, Django, Django REST Framework, Django Channels, FastAPI, Go, JavaScript, Node.js, Express.js, Celery, SQLAlchemy, MTA:SA Lua |
+| Databases | MongoDB, PostgreSQL, Firebase, MySQL, SQLite, Apache Cassandra, Redis, Supabase, Neon |
+| Database tools and ORMs | phpMyAdmin, Navicat, Prisma, Drizzle ORM |
+| Data and AI | NumPy and pandas (intermediate); currently learning PyTorch |
+| Editors and IDEs | WebStorm, IntelliJ IDEA, Visual Studio Code, Visual Studio |
+| Version control and delivery | Git, GitHub, Docker, Vercel, Vite, Parcel |
+| Cloud and servers | AWS and Azure (basic to intermediate); VDS and VPS administration |
+| Operating systems | Linux, Windows 7/8/10/11, Pardus |
+| Testing and integrations | Playwright, Vitest, React Testing Library, ESLint, Clerk, NextAuth, Discord.js, Telegraf, Twilio, Resend |
 
-This is a technology inventory, not a proficiency ranking. It combines dependency manifests in repositories accessible to my account with active work on my own site. The [inventory script](scripts/inventory_tech.py) prints aggregate package names without revealing private project names.
+This inventory combines technologies I have used directly with those found in accessible project manifests. Experience levels are specified where relevant; PyTorch is a current learning focus. The [inventory script](scripts/inventory_tech.py) prints aggregate package names without revealing private project names.
 
 ## Selected work
 

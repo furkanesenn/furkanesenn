@@ -40,7 +40,7 @@ This inventory combines technologies I have used directly with those found in ac
 ## Selected work
 
 - **[MasalApp · Avexra Digital](https://www.furkanesen.com.tr/en/work/masalapp):** SEO and website performance work with a public case note and explicit measurement limits.
-- **[jusTHINK · Co-founder & CTO](https://www.furkanesen.com.tr/en/work/justhink):** Product engineering and team development. The [v1 repository](https://github.com/Justhink-Community/justhink-v1) is public.
+- **[jusTHINK · Co-founder & CTO](https://www.furkanesen.com.tr/en/work/justhink):** Product engineering and team development. Explore the public [justhink-latest repository](https://github.com/Justhink-Community/justhink-latest).
 - **[Focusify · Back-end development](https://github.com/focusifynet):** Django and Go product work in 2023–2024. The private code is not presented as public portfolio evidence.
 
 I care about the path from a working product to a measurable outcome, and about stating clearly which part of that path the evidence actually supports.

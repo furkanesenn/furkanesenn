@@ -1,0 +1,26 @@
+{
+  "as_of": "2026-09-24",
+  "contributions_2021_to_date": 932,
+  "restricted_contributions_2021_to_date": 475,
+  "authored_commits_searchable": 594,
+  "repositories_scanned": 68,
+  "code_repositories": 61,
+  "private_code_repositories": 26,
+  "current_project_code_lines": 207268,
+  "languages_by_current_code_lines": {
+    "CSS": 59131,
+    "HTML": 39831,
+    "Python": 31368,
+    "JavaScript": 27346,
+    "SCSS": 24448,
+    "TypeScript": 23616,
+    "Go": 727,
+    "Lua": 423,
+    "SQL": 296,
+    "JSON": 30,
+    "XML": 27,
+    "Dockerfile": 17,
+    "INI": 7,
+    "DOS Batch": 1
+  }
+}
